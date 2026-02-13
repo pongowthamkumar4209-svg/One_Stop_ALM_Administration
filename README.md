@@ -1,3 +1,9 @@
+Use the One stop ALM adminsitration ZIP file to use all the utilites combined into a single package using python with OTA api.
+You need to naviagte to One Stop ALM Administration\One Stop ALM Administration\ALMAdminV2\ALMAdminV2 and launch login.py to open the Utility.
+the actions it can perform like user manangement, test case extraction, attachment extraction, test evidence generator, maintenance notification for ALM.
+
+
+
 # Welcome to your Lovable project
 
 ## Project info
