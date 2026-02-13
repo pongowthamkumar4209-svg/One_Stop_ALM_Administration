@@ -2,7 +2,11 @@ Use the One stop ALM adminsitration ZIP file to use all the utilites combined in
 You need to naviagte to One Stop ALM Administration\One Stop ALM Administration\ALMAdminV2\ALMAdminV2 and launch login.py to open the Utility.
 the actions it can perform like user manangement, test case extraction, attachment extraction, test evidence generator, maintenance notification for ALM.
 
+⚠ Backend Execution Note
 
+The frontend is deployed on Vercel for demonstration purposes.
+The backend requires a Windows environment due to ALM OTA COM dependencies (win32com, TDApiOle80).
+Backend must be run locally or on a Windows server.
 
 # Welcome to your Lovable project
 
