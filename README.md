@@ -8,6 +8,8 @@ The frontend is deployed on Vercel for demonstration purposes.
 The backend requires a Windows environment due to ALM OTA COM dependencies (win32com, TDApiOle80).
 Backend must be run locally or on a Windows server.
 
+Front end ui link: one-stop-alm-administration.vercel.app
+
 # Welcome to your Lovable project
 
 ## Project info
