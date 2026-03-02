@@ -1,4 +1,5 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const TIMEOUT_MS = 6000;
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem('alm_token');
@@ -8,14 +9,27 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     ...(options.headers as Record<string, string> || {}),
   };
 
-  const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
-  
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: 'Request failed' }));
-    throw new Error(err.detail || `HTTP ${res.status}`);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      ...options,
+      headers,
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: 'Request failed' }));
+      throw new Error(err.detail || `HTTP ${res.status}`);
+    }
+    return res.json();
+  } catch (err: any) {
+    clearTimeout(timer);
+    if (err.name === 'AbortError') throw new Error('TIMEOUT');
+    if (err.message === 'Failed to fetch') throw new Error('UNREACHABLE');
+    throw err;
   }
-  
-  return res.json();
 }
 
 export const api = {
