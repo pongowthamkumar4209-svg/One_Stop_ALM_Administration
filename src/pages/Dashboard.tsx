@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { StatusIndicator } from '@/components/StatusIndicator';
 import { ExecutionConsole } from '@/components/ExecutionConsole';
@@ -128,9 +129,9 @@ export default function Dashboard() {
               { label: 'Generate Evidence', icon: FileCheck, path: '/evidence-generator' },
               { label: 'Download Attachments', icon: Download, path: '/attachment-downloader' },
             ].map(action => (
-              <a
+              <Link
                 key={action.path}
-                href={action.path}
+                to={action.path}
                 className="flex items-center gap-2 rounded px-2.5 py-2 text-xs transition-colors"
                 style={{ color: '#777' }}
                 onMouseEnter={e => {
@@ -144,7 +145,7 @@ export default function Dashboard() {
               >
                 <action.icon className="h-3.5 w-3.5 shrink-0" />
                 <span className="leading-tight">{action.label}</span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
