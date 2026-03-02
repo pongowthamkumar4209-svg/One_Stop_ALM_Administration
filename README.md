@@ -3,19 +3,19 @@
 > A full-stack web application to automate ALM administration tasks — built with React, Python Flask, and OpenText ALM OTA API.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-00e5ff?style=for-the-badge&logo=vercel&logoColor=black)](https://one-stop-alm-administration.vercel.app)
-[![Backend](https://img.shields.io/badge/Backend-Render-7c3aed?style=for-the-badge&logo=render&logoColor=white)](https://one-stop-alm-backend.onrender.com)
+[![Backend](https://img.shields.io/badge/Backend-Local%20via%20start.bat-e03030?style=for-the-badge&logo=windows&logoColor=white)](#-local-setup)
 [![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![React](https://img.shields.io/badge/React-TypeScript-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 
------
+---
 
 ## 🚀 Live Application
 
-**🔗 <https://one-stop-alm-administration.vercel.app>**
+**🔗 https://one-stop-alm-administration.vercel.app**
 
-> Click **“DEMO ACCESS (Preview Mode)”** to explore all features without an ALM connection.
+> Click **"DEMO ACCESS (Preview Mode)"** to explore all features without an ALM connection.
 
------
+---
 
 ## 📌 Overview
 
@@ -23,36 +23,36 @@ Managing ALM administration tasks across multiple tools is time-consuming and er
 
 Built by an RPA Developer with 4+ years of ALM experience — including ALM v16 → v24 upgrade management.
 
------
+---
 
 ## ✨ Features
 
 ### 8 Utility Modules
 
-|Module                        |Description                                                                  |
-|------------------------------|-----------------------------------------------------------------------------|
-|🔐 **User Access Management**  |LDAP-based user provisioning, site admin assignment, project group management|
-|📋 **Test Case Extraction**    |Extract from Test Plan folders or Test Set IDs — with or without attachments |
-|📄 **Evidence Generator**      |Auto-generate Word documents per tester from ALM run data                    |
-|🔄 **Test Type Update**        |Bulk update test types (MANUAL, QUICKTEST, BUSINESS-PROCESS, etc.)           |
-|🐛 **Defect Extraction**       |Extract defects with Status, Priority, Severity, Category filters            |
-|📎 **Attachment Downloader**   |Download run-level and step-level attachments for specific or all test sets  |
-|📧 **Maintenance Notification**|Send maintenance window emails to all project users via Outlook              |
-|📊 **Operations Dashboard**    |Real-time execution history, system health, quick actions                    |
+| Module | Description |
+|---|---|
+| 🔐 **User Access Management** | LDAP-based user provisioning, site admin assignment, project group management |
+| 📋 **Test Case Extraction** | Extract from Test Plan folders or Test Set IDs — with or without attachments |
+| 📄 **Evidence Generator** | Auto-generate Word documents per tester from ALM run data |
+| 🔄 **Test Type Update** | Bulk update test types (MANUAL, QUICKTEST, BUSINESS-PROCESS, etc.) |
+| 🐛 **Defect Extraction** | Extract defects with Status, Priority, Severity, Category filters |
+| 📎 **Attachment Downloader** | Download run-level and step-level attachments for specific or all test sets |
+| 📧 **Maintenance Notification** | Send maintenance window emails to all project users via Outlook |
+| 📊 **Operations Dashboard** | Real-time execution history, system health, quick actions |
 
-### Two Operating Modes
+### Three Operating Modes
 
-|Mode           |When                                     |How                                   |
-|---------------|-----------------------------------------|--------------------------------------|
-|🟢 **Real Mode**|Windows machine with ALM client installed|OTA API (`TDApiOle80`) auto-detected  |
-|🟡 **Demo Mode**|Cloud / any machine without ALM client   |Realistic dummy responses with full UI|
+| Mode | When | How |
+|---|---|---|
+| 🟢 **Live Mode** | Windows machine with ALM client + `start.bat` running | OTA API (`TDApiOle80`) auto-detected |
+| 🔵 **Default Mode** | `start.bat` running, no ALM client installed | Backend responds with realistic demo data |
+| 🟡 **Demo Mode** | No backend, any machine/browser | Fully simulated responses, no setup required |
 
------
+---
 
 ## 🛠️ Tech Stack
 
 **Frontend**
-
 - React 18 + TypeScript
 - Vite
 - Tailwind CSS
@@ -60,20 +60,17 @@ Built by an RPA Developer with 4+ years of ALM experience — including ALM v16 
 - Deployed on **Vercel**
 
 **Backend**
-
 - Python 3.14
 - Flask 3.0 REST API
 - Flask-CORS
-- Gunicorn
-- Deployed on **Render**
+- Runs locally via `start.bat` (Windows)
 
 **ALM Integration**
-
 - OpenText ALM 24.x
 - OTA API (`TDApiOle80`) via `win32com.client`
-- REST session management
+- Single COM thread — `tdc` shared across all 8 utilities
 
------
+---
 
 ## 🏗️ Architecture
 
@@ -81,27 +78,30 @@ Built by an RPA Developer with 4+ years of ALM experience — including ALM v16 
 Browser (Vercel)
       │
       ▼
-React Frontend ──────► Flask REST API (Render)
+React Frontend ──────► Flask REST API (localhost:8000)
                               │
-                    ┌─────────┴─────────┐
-                    │                   │
-              OTA Available?        Demo Mode
-              (Windows + ALM)      (Linux/Cloud)
-                    │                   │
-                    ▼                   ▼
-            Real ALM Server      Dummy Responses
-           (TDApiOle80 COM)      (Realistic Data)
+                    ┌─────────┴──────────┐
+                    │                    │
+              OTA Available?         Demo Mode
+              (Windows + ALM)       (No ALM client)
+                    │                    │
+                    ▼                    ▼
+            Real ALM Server       Dummy Responses
+           (TDApiOle80 COM)       (Realistic Data)
 ```
 
------
+> **Note:** The backend uses Windows COM (`win32com`) to interface with the ALM OTA API.
+> This requires running on a Windows machine — cloud hosting (Linux) runs in Demo mode only.
+
+---
 
 ## 🖥️ Local Setup
 
 ### Prerequisites
-
 - Python 3.8+
 - Node.js 18+
 - Git
+- Windows OS (for Live ALM mode)
 
 ### 1. Clone the repository
 
@@ -113,7 +113,11 @@ cd One_Stop_ALM_Administration
 ### 2. Start the Flask backend
 
 ```bash
-pip install flask flask-cors
+# Option A — double-click start.bat (recommended)
+start.bat
+
+# Option B — manual
+pip install flask flask-cors openpyxl pandas beautifulsoup4 python-docx
 python backend/app.py
 # → Running on http://localhost:8000
 ```
@@ -130,40 +134,44 @@ npm run dev
 
 ```
 http://localhost:8080
+
+# Or use the Vercel deployment (backend must still be running locally)
+https://one-stop-alm-administration.vercel.app
 ```
 
-> **For Real ALM Mode:** Run on a Windows machine with OpenText ALM client installed. The backend auto-detects OTA availability and switches to real mode automatically.
+> **For Real ALM Mode:** Run on a Windows machine with OpenText ALM client installed.
+> The backend auto-detects OTA availability on startup and switches mode automatically.
 
------
+---
 
 ## 🔌 API Endpoints
 
-|Method|Endpoint                   |Description            |
-|------|---------------------------|-----------------------|
-|POST  |`/api/auth/login`          |Login to ALM server    |
-|GET   |`/api/auth/domains`        |Get accessible domains |
-|GET   |`/api/auth/projects`       |Get projects for domain|
-|POST  |`/api/auth/connect`        |Connect to project     |
-|POST  |`/api/auth/logout`         |Disconnect & logout    |
-|POST  |`/api/user/provision`      |Grant user access      |
-|GET   |`/api/user/groups`         |List project groups    |
-|POST  |`/api/extract/tests`       |Extract test cases     |
-|POST  |`/api/extract/defects`     |Extract defects        |
-|POST  |`/api/generate/evidence`   |Generate evidence docs |
-|POST  |`/api/update/test-type`    |Bulk update test types |
-|POST  |`/api/download/attachments`|Download attachments   |
-|POST  |`/api/maintenance/notify`  |Send maintenance email |
-|GET   |`/api/dashboard/stats`     |Dashboard statistics   |
-|GET   |`/api/health`              |Service health check   |
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/login` | Login to ALM server |
+| GET | `/api/auth/domains` | Get accessible domains |
+| GET | `/api/auth/projects` | Get projects for domain |
+| POST | `/api/auth/connect` | Connect to project |
+| POST | `/api/auth/logout` | Disconnect & logout |
+| POST | `/api/user/provision` | Grant user access |
+| GET | `/api/user/groups` | List project groups |
+| POST | `/api/extract/tests` | Extract test cases |
+| POST | `/api/extract/defects` | Extract defects |
+| POST | `/api/generate/evidence` | Generate evidence docs |
+| POST | `/api/update/test-type` | Bulk update test types |
+| POST | `/api/download/attachments` | Download attachments |
+| POST | `/api/maintenance/notify` | Send maintenance email |
+| GET | `/api/dashboard/stats` | Dashboard statistics |
+| GET | `/api/health` | Service health check |
 
------
+---
 
 ## 📁 Project Structure
 
 ```
 One_Stop_ALM_Administration/
 ├── backend/
-│   ├── app.py              # Flask REST API (all 8 utilities)
+│   ├── app.py              # Flask REST API (all 8 utilities + single ALM thread)
 │   └── requirements.txt    # Python dependencies
 ├── src/
 │   ├── pages/              # React page components
@@ -177,18 +185,22 @@ One_Stop_ALM_Administration/
 │   │   ├── AccessProvider.tsx
 │   │   └── MaintenanceNotification.tsx
 │   ├── services/
-│   │   └── api.ts          # API service layer
+│   │   └── api.ts          # API service layer with timeout + offline fallback
+│   ├── hooks/
+│   │   └── useExecutionConsole.ts  # Execution console + demo simulation
 │   ├── components/
+│   │   ├── AppLayout.tsx
 │   │   ├── ModuleLayout.tsx
 │   │   └── ExecutionConsole.tsx
 │   └── contexts/
-│       └── AuthContext.tsx
+│       └── AuthContext.tsx  # Session validation + auto-clear stale tokens
+├── start.bat               # Windows launcher — installs deps + starts backend
 ├── package.json
 ├── vite.config.ts
 └── README.md
 ```
 
------
+---
 
 ## 🔐 Authentication Flow
 
@@ -202,7 +214,7 @@ One_Stop_ALM_Administration/
 7. Sign Out → tdc.Disconnect() + tdc.Logout() + tdc.ReleaseConnection()
 ```
 
------
+---
 
 ## 👨‍💻 Author
 
@@ -217,13 +229,13 @@ RPA Developer | Automation & ALM Integration Engineer
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077b5?style=flat&logo=linkedin)](https://linkedin.com/in/pongowthamkumar)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-333?style=flat&logo=github)](https://github.com/pongowthamkumar4209-svg)
 
------
+---
 
 ## 📄 License
 
 This project is for portfolio and demonstration purposes.
 
------
+---
 
 <div align="center">
   <strong>⭐ Star this repo if you found it useful!</strong>
